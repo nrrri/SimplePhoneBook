@@ -26,8 +26,9 @@ struct ContentView: View {
                             TextField ("Name", text: $tempName)
                             TextField ("Position", text: $tempPosition)
                             TextField ("Phone Number", text: $tempPhone)
-                        } 
+                        }
                         .padding(16)
+                        .background(Color(red: 240/255, green: 240/255, blue: 240/255))
                         .onAppear(perform: {
                             item.contactName = tempName
                             item.position = tempPosition
@@ -41,6 +42,8 @@ struct ContentView: View {
                             tempPosition = "Sample"
                             tempPhone = "555 555 5555"
                         })
+                        .padding(24)
+                        
                        
                     } label: {
                         Text(item.contactName)
@@ -54,6 +57,7 @@ struct ContentView: View {
                     HStack {
                         Image(systemName: "magnifyingglass")
                         TextField("Search", text: $search)
+                        // TBD - add search function
                             
                     }
                     .padding(4)
@@ -83,7 +87,6 @@ struct ContentView: View {
     private func addItem() {
         let newItem = Item(contactName: tempName, position: tempPosition, phoneNumber: tempPhone)
         withAnimation {
-//            let newItem = Item(timestamp: Date())
             modelContext.insert(newItem)
         }
     }
