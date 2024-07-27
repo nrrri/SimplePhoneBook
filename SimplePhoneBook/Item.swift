@@ -10,9 +10,15 @@ import SwiftData
 
 @Model
 final class Item {
-    var timestamp: Date
+
+    var contactName: String
+    var position: String
+    var phoneNumber: String
     
-    init(timestamp: Date) {
-        self.timestamp = timestamp
+    
+    init(contactName: String, position: String, phoneNumber: String) {
+        self.contactName = contactName
+        self.position = position
+        self.phoneNumber = phoneNumber
     }
 }

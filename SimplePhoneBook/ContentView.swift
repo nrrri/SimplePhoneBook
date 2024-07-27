@@ -11,20 +11,61 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
+    
+    @State var tempName: String = "Sample"
+    @State var tempPosition: String = "Sample"
+    @State var tempPhone: String = "555 555 5555"
+    @State var search: String = "Search"
 
     var body: some View {
         NavigationSplitView {
             List {
                 ForEach(items) { item in
                     NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                        VStack (alignment: .center) {
+                            TextField ("Name", text: $tempName)
+                            TextField ("Position", text: $tempPosition)
+                            TextField ("Phone Number", text: $tempPhone)
+                        } 
+                        .padding(16)
+                        .onAppear(perform: {
+                            item.contactName = tempName
+                            item.position = tempPosition
+                            item.phoneNumber = tempPhone
+                        })
+                        .onDisappear(perform: {
+                            item.contactName = tempName
+                            item.position = tempPosition
+                            item.phoneNumber = tempPhone
+                            tempName = "Sample"
+                            tempPosition = "Sample"
+                            tempPhone = "555 555 5555"
+                        })
+                       
                     } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        Text(item.contactName)
                     }
                 }
                 .onDelete(perform: deleteItems)
             }
             .toolbar {
+                
+                ToolbarItem(placement: .topBarLeading) {
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                        TextField("Search", text: $search)
+                            
+                    }
+                    .padding(4)
+                    .padding(.leading, 8)
+                    .foregroundColor(.gray)
+                    .frame(width: 250)
+                    .overlay( /// apply a rounded border
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(.gray, lineWidth: 1)
+                    )
+                                        
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
@@ -40,8 +81,9 @@ struct ContentView: View {
     }
 
     private func addItem() {
+        let newItem = Item(contactName: tempName, position: tempPosition, phoneNumber: tempPhone)
         withAnimation {
-            let newItem = Item(timestamp: Date())
+//            let newItem = Item(timestamp: Date())
             modelContext.insert(newItem)
         }
     }
